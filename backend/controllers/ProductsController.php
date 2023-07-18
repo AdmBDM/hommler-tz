@@ -4,25 +4,27 @@ namespace backend\controllers;
 
 use common\models\Products;
 use common\ProductsSearch;
+use yii\data\ArrayDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * ProductsController implements the CRUD actions for Products model.
  */
 class ProductsController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
-    public function behaviors()
-    {
+	/**
+	 * @return array|\string[][]|\string[][][][]
+	 */
+    public function behaviors(): array
+	{
         return array_merge(
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -63,7 +65,8 @@ class ProductsController extends Controller
     /**
      * Creates a new Products model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     *
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -85,8 +88,10 @@ class ProductsController extends Controller
     /**
      * Updates an existing Products model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param int $id ID
-     * @return string|\yii\web\Response
+     *
+	 * @return string|Response
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
@@ -106,7 +111,7 @@ class ProductsController extends Controller
      * Deletes an existing Products model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
@@ -131,4 +136,21 @@ class ProductsController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
+	/**
+	 * @return string
+	 */
+	public function actionOrder(): string
+	{
+		$searchModel = new ProductsSearch();
+		$orders = $searchModel->columnsOrders();
+		$dataProvider = new ArrayDataProvider([
+			'allModels' => $orders,
+		]);
+
+		return $this->render('order', [
+				'orders' => $orders,
+				'dataProvider' => $dataProvider,
+		]);
+	}
 }

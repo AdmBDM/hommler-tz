@@ -2,9 +2,7 @@
 
 namespace common\models;
 
-use Yii;
-use yii\grid\ActionColumn;
-use yii\helpers\Url;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "products".
@@ -16,9 +14,21 @@ use yii\helpers\Url;
  * @property string $product_type
  * @property int $quantity
  */
-class Products extends \yii\db\ActiveRecord
+class Products extends ActiveRecord
 {
 	const FIELD_SORT = 'order';
+
+	private $userIdCookie;
+
+
+	public function __construct($config = [])
+	{
+		$this->userIdCookie = 'htz' . (\Yii::$app->user->id ?: 0);
+		if (!isset($_COOKIE[$this->userIdCookie])) {
+			setcookie($this->userIdCookie, json_encode($this->columnsOrdersInit()), time() + 3600 * 24 * 365, '/');
+		}
+		parent::__construct($config);
+	}
 
 	/**
 	 * @return string
@@ -39,7 +49,6 @@ class Products extends \yii\db\ActiveRecord
             [['quantity'], 'default', 'value' => 0],
             [['sku'], 'string', 'max' => 50],
             [['product_name', 'product_type'], 'string', 'max' => 255],
-//            [['product_type'], 'default', 'value' => ''],
         ];
     }
 
@@ -52,7 +61,7 @@ class Products extends \yii\db\ActiveRecord
             'id' => 'ID',
             'image' => 'Фото',
             'sku' => 'СКУ',
-            'product_name' => 'Наиенование',
+            'product_name' => 'Наименование',
             'product_type' => 'Тип',
             'quantity' => 'Кол-во',
         ];
@@ -108,7 +117,15 @@ class Products extends \yii\db\ActiveRecord
 	 */
 	public function columnsOrders(): array
 	{
-		$orders = $this->columnsOrdersInit();
+//		$orders = $this->columnsOrdersInit();
+
+		if (isset($_COOKIE[$this->userIdCookie])) {
+			$orders = json_decode($_COOKIE[$this->userIdCookie], true);
+		} else {
+			$orders = $this->columnsOrdersInit();
+			setcookie($this->userIdCookie, json_encode($orders), time() + 3600 * 24 * 365, '/');
+		}
+
 		uasort($orders, build_sorter_asc(self::FIELD_SORT));
 
 		return $orders;

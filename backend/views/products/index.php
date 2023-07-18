@@ -12,13 +12,17 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Товары');
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
+
 <div class="products-index">
+<!--	--><?php //= myDebug($dataProvider); ?>
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a(Yii::t('app', 'Создать'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Выбрать столбцы'), ['order'], ['class' => 'btn btn-info']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -48,51 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
 		];
 	?>
 
-
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => $order,
-//        'columns' => [
-//			[
-//				'class' => ActionColumn::class,
-//				'urlCreator' => function ($action, Products $model, $key, $index, $column) {
-//					return Url::toRoute([$action, 'id' => $model->id]);
-//				},
-//				'options' => ['width' => '100px'],
-//			],
-//			[
-//				'attribute' => 'id',
-//				'options' => ['style' => 'width: 50px;']
-//			],
-//			[
-//				'attribute' => 'image',
-//				'options' => ['style' => 'width: 200px;']
-//			],
-//			[
-//				'attribute' => 'sku',
-//				'options' => ['style' => 'width: 200px;']
-//			],
-//			[
-//				'attribute' => 'product_name',
-//				'options' => ['style' => 'width: 300px;']
-//			],
-//			[
-//				'attribute' => 'product_type',
-//				'options' => ['style' => 'width: 100px;']
-//			],
-//			[
-//				'attribute' => 'quantity',
-//				'options' => ['style' => 'width: 70px;']
-//			],
-//			[
-//				'label' => '',
-//				'format' => 'text',
-//				'contentOptions' => ['style'=>'white-space: normal;'],
-//				'value' => function() {return '';},
-//			],
-//        ],
     ]); ?>
 
     <?php Pjax::end(); ?>

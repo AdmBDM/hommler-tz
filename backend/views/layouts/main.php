@@ -6,6 +6,8 @@
 	/* @var $content string */
 
 	$this->title = Yii::$app->params['app_title'] . ' (admin)';
+	session_start();
+	$_SESSION['name'] = 'htz007';
 
 if (Yii::$app->controller->action->id === 'login') { 
 /**
