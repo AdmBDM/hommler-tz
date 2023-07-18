@@ -5,6 +5,7 @@
 	/* @var $this View */
 	/* @var $content string */
 
+	$this->title = Yii::$app->params['app_title'] . ' (admin)';
 
 if (Yii::$app->controller->action->id === 'login') { 
 /**

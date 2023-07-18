@@ -5,3 +5,7 @@
 .navbar-nav {
 	flex-direction: row;
 }
+
+td a {
+	margin-right: 7px;
+}

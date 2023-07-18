@@ -37,7 +37,7 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'На главную', 'url' => ['/site']],
-        ['label' => 'О нас', 'url' => ['/site/about']],
+        ['label' => 'О системе', 'url' => ['/site/about']],
         ['label' => 'Написать нам', 'url' => ['/site/contact']],
     ];
 
